@@ -1,0 +1,14 @@
+{
+  "name": "Node Solutions",
+  "sender": "Priya Raman",
+  "signature": "Priya Raman\nClient Operations\nNode Solutions",
+  "support_email": "support@example.com",
+  "timezone": "Asia/Kolkata",
+  "business_hours": { "start": 9, "end": 18, "days": [1, 2, 3, 4, 5] },
+  "sla": {
+    "Urgent": { "acknowledge_minutes": 15, "resolve_hours": 4, "internal_action": "Page on-call and post to #incidents" },
+    "High": { "acknowledge_minutes": 60, "resolve_hours": 24, "internal_action": "Assign a named owner the same business day" },
+    "Medium": { "acknowledge_minutes": 240, "resolve_hours": 72, "internal_action": "Place in the normal service queue" },
+    "Low": { "acknowledge_minutes": 1440, "resolve_hours": null, "internal_action": "Log to the product backlog or next planning cycle" }
+  }
+}

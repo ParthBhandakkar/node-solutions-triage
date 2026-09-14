@@ -1,0 +1,22 @@
+{
+  "name": "ai-request-triage-assistant",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "workspaces": ["shared", "server", "web"],
+  "scripts": {
+    "dev": "concurrently -n api,web -c cyan,magenta \"npm -w @triage/server run dev\" \"npm -w @triage/web run dev\"",
+    "build": "npm run build --workspaces",
+    "typecheck": "npm run typecheck --workspaces",
+    "test": "npm -w @triage/server run test",
+    "eval": "npm -w @triage/server run eval",
+    "start": "npm -w @triage/server run start"
+  },
+  "devDependencies": {
+    "@types/node": "22.15.30",
+    "concurrently": "10.0.5",
+    "tsx": "4.23.13",
+    "typescript": "7.0.2",
+    "vitest": "3.2.4"
+  }
+}
