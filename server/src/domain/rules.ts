@@ -2,6 +2,7 @@ import type { Analysis, Draft, Owner, Category, Priority, Sla } from "@triage/sh
 import { ROUTING_MATRIX } from "@triage/shared";
 
 const clean = (text: string) => text.trim().replace(/\s+/g, " ");
+const bound = (text: string, max: number) => text.length <= max ? text : `${text.slice(0, max - 3).trimEnd()}...`;
 const has = (text: string, pattern: RegExp) => pattern.test(text);
 
 function unique<T>(items: T[]): T[] { return [...new Set(items)]; }
@@ -58,6 +59,7 @@ export function rulesAnalyze(input: string): Analysis {
   const owner: Owner = security || outage || category === "Technical" ? "Engineering" : ROUTING_MATRIX[category];
   const tone: Analysis["client_tone"] = has(lower, /(urgent|immediate|as soon as possible)/i) ? "urgent" : has(lower, /(frustrated|unavailable|accidentally|cannot)/i) ? "frustrated" : sales ? "positive" : "neutral";
   const summary = text.length > 210 ? `${text.slice(0, 207)}...` : text;
+  const requestedAction = bound(text, 240);
   const reason = priority === "Urgent" ? "The request includes an active operational or security impact requiring immediate action." : priority === "High" ? "The request has a material impact or a time-bound business deadline." : priority === "Low" ? "The requester explicitly describes a non-urgent idea or no deadline." : "The request is actionable but has no immediate outage, exposure, or hard deadline.";
 
   return {
@@ -71,7 +73,7 @@ export function rulesAnalyze(input: string): Analysis {
     risk_signals: unique(risks).slice(0, 10),
     entities,
     client_tone: tone,
-    requested_action: text,
+    requested_action: requestedAction,
     clarifying_questions: text.length < 30 ? ["What outcome would you like us to help with?", "Is there a deadline or current business impact?"] : [],
     confidence: { category: 0.55, priority: 0.55, owner: 0.55 }
   };
@@ -91,7 +93,7 @@ export function rulesCompose(payload: ComposePayload): Draft {
   return {
     subject: `${subjectPrefix}${final.category} request`,
     body,
-    internal_note: `${final.owner}: review the request first. Priority is ${final.priority} because ${final.priority_reason}${directives.length ? ` Policy directives: ${directives.join("; ")}` : ""}`,
+    internal_note: bound(`${final.owner}: review the request first. Priority is ${final.priority} because ${final.priority_reason}${directives.length ? ` Policy directives: ${directives.join("; ")}` : ""}`, 700),
     next_steps: [
       `Acknowledge within ${acknowledgeWindow}`,
       `Review the request and confirm the next action`,

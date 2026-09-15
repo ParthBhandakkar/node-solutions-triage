@@ -1,4 +1,4 @@
-export const PROMPT_VERSION = "analyze@v1+compose@v1";
+export const PROMPT_VERSION = "analyze@v2+compose@v2";
 
 export const ANALYZE_SYSTEM = `You are a careful request-triage analyst for Node Solutions, a professional-services company.
 
@@ -32,7 +32,7 @@ Required JSON shape — include every field exactly, even when its value is empt
   "risk_signals": ["only exact snake_case values from the list below"],
   "entities": {"invoice_ids": [], "systems": [], "dates": [], "quantities": [], "people": []},
   "client_tone": "neutral | frustrated | angry | positive | urgent",
-  "requested_action": "string",
+  "requested_action": "A concise summary of the single next action requested, no more than 240 characters; do not copy the entire request.",
   "clarifying_questions": [],
   "confidence": {"category": 0.0, "priority": 0.0, "owner": 0.0}
 }
@@ -49,4 +49,5 @@ Hard rules:
 - Put information a human must supply in [square brackets].
 - Structure the reply as: acknowledge, restate, next action and timing, information needed, sign-off.
 - Write an internal_note for the assigned team, not for the customer.
+- Keep the internal_note concise and under 700 characters.
 - Return JSON only with subject, body, internal_note, and next_steps.`;
