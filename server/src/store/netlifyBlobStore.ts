@@ -5,7 +5,7 @@ import type { RequestStore } from "./types.js";
 const STORE_NAME = "triage-requests";
 
 export class NetlifyBlobRequestStore implements RequestStore {
-  private readonly store = getStore({ name: STORE_NAME, consistency: "strong" });
+  private readonly store = getStore({ name: STORE_NAME, consistency: "eventual" });
 
   async list(): Promise<TriagedRequest[]> {
     const { blobs } = await this.store.list();
@@ -15,7 +15,7 @@ export class NetlifyBlobRequestStore implements RequestStore {
   }
 
   async get(id: string): Promise<TriagedRequest | undefined> {
-    const value = await this.store.get(id, { type: "json", consistency: "strong" }) as unknown;
+    const value = await this.store.get(id, { type: "json", consistency: "eventual" }) as unknown;
     if (value === null) return undefined;
     return TriagedRequestSchema.parse(value);
   }

@@ -60,7 +60,7 @@ GEMINI_MODEL=gemini-2.5-flash-lite
 
 ## Netlify deployment
 
-The repository includes `netlify.toml` and `netlify/functions/api.mjs`. Netlify serves `web/dist` as the frontend and routes `/api/*` to the Express API as a serverless function. The function uses Netlify Blobs for durable request storage when `NETLIFY=true`. For larger workloads, configure `DATABASE_URL` to use the indexed Postgres adapter instead.
+The repository includes `netlify.toml` and `netlify/functions/api.cjs`. Netlify serves `web/dist` as the frontend and routes `/api/*` to the Express API as a serverless function. The function uses Netlify Blobs for durable request storage when `NETLIFY=true`. For larger workloads, configure `DATABASE_URL` to use the indexed Postgres adapter instead.
 
 ```bash
 npm install

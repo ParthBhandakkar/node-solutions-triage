@@ -17,7 +17,7 @@ import { rateLimit } from "./middleware/rateLimit.js";
 import { demoKey } from "./middleware/demoKey.js";
 import { PRIORITY_RANK } from "@triage/shared";
 
-const currentDir = path.dirname(fileURLToPath(import.meta.url));
+const currentDir = process.env.NETLIFY_FUNCTIONS === "true" ? process.cwd() : path.dirname(fileURLToPath(import.meta.url));
 
 function queryValue(req: Request, name: string): string | undefined {
   const value = req.query[name];
@@ -142,9 +142,11 @@ export function createApp(provider: LlmProvider, store: RequestStore): Express {
 }
 
 if (process.env.NODE_ENV !== "test" && process.env.NETLIFY_FUNCTIONS !== "true") {
-  const port = Number(process.env.PORT ?? 3001);
-  const provider = await createProvider();
-  const store = createStore();
-  const app = createApp(provider, store);
-  app.listen(port, () => console.log(`Triage API listening on http://localhost:${port} (${provider.name} / ${provider.model})`));
+  void (async () => {
+    const port = Number(process.env.PORT ?? 3001);
+    const provider = await createProvider();
+    const store = createStore();
+    const app = createApp(provider, store);
+    app.listen(port, () => console.log(`Triage API listening on http://localhost:${port} (${provider.name} / ${provider.model})`));
+  })();
 }

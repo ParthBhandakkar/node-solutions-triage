@@ -39,6 +39,6 @@ The model may classify a wrong-workspace customer-data upload inconsistently. Th
 
 ## Hosted deployment architecture
 
-The Netlify deployment serves `web/dist` from the CDN and rewrites `/api/*` to `netlify/functions/api.mjs`. That function constructs the same Express app, provider factory, policy pipeline, and store factory used locally. `GROQ_API_KEY` is server-only. Netlify Blobs provides strong-consistency durable storage for the hosted prototype; `DATABASE_URL` switches the store to indexed Postgres for high-volume deployments.
+The Netlify deployment serves `web/dist` from the CDN and rewrites `/api/*` to `netlify/functions/api.cjs`. That function constructs the same Express app, provider factory, policy pipeline, and store factory used locally. `GROQ_API_KEY` is server-only. Netlify Blobs provides durable eventual-consistency storage for the hosted Lambda-compatible prototype; `DATABASE_URL` switches the store to indexed Postgres for high-volume deployments.
 
 The production boundary adds Helmet headers, strict origin allowlisting, request IDs, no-store API responses, 32 KB payload limits, and a per-instance rate limiter. The per-instance limiter is intentionally not described as a global control: at scale it should be paired with a WAF or shared Redis/Upstash limiter. Authentication and tenant authorization remain required next steps before real client traffic.

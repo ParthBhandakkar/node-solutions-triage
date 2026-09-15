@@ -8,3 +8,6 @@ server/data/*.json
 coverage/
 *.log
 *.pdf
+
+# Local Netlify folder
+.netlify

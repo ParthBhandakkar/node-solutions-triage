@@ -11,7 +11,7 @@ Groq output requests strict JSON Schema for supported models and still passes th
 ```text
 Netlify CDN
   ├── /                  → web/dist/index.html and assets
-  └── /api/*             → netlify/functions/api.mjs
+  └── /api/*             → netlify/functions/api.cjs
                               └── Express app
                                   ├── Groq provider
                                   ├── policy + triage pipeline
@@ -23,7 +23,7 @@ Netlify CDN
 ## Storage selection
 
 - Local development: `JsonRequestStore`, ignored under `server/data`.
-- Netlify Functions: `NetlifyBlobRequestStore`, strong-consistency site-wide store named `triage-requests`.
+- Netlify Functions: `NetlifyBlobRequestStore`, a durable site-wide eventual-consistency store named `triage-requests` for the Lambda-compatible adapter.
 - Multi-instance/high-volume deployment: set `DATABASE_URL` and the factory selects `PostgresRequestStore`. It creates a small indexed table for request payload, owner, priority, category, status, and received time.
 
 Netlify Blobs is a durable key/value store and the current list endpoint reads stored request keys, so it is appropriate for a small queue/demo. Postgres is the correct path for high-volume queries, reporting, concurrent updates, retention policies, and operational analytics.

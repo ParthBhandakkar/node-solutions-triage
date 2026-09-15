@@ -12,6 +12,7 @@
   external_node_modules = ["express", "serverless-http", "@netlify/blobs", "groq-sdk", "pg"]
   included_files = ["server/config/**"]
 
+
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"
